@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Structs & methods · R+</title><link rel="stylesheet" href="style.css"></head><body><input id="menu-toggle" type="checkbox"><label class="menu-button" for="menu-toggle">☰</label><aside class="sidebar"><a class="brand" href="index.html">R<span class="accent">+</span><small>language docs</small></a><nav><p>Start here</p><a href="index.html">Overview</a><a href="getting-started.html">Getting started</a><p>Language</p><a href="basics.html">Language basics</a><a href="control-flow.html">Control flow</a><a href="functions.html">Functions</a><a class="active" href="structs.html">Structs & methods</a><a href="lists.html">Lists & indexing</a><a href="ownership.html">Ownership</a><p>Tooling</p><a href="addons.html">Local addons</a><a href="native.html">Native compilation</a></nav><a class="github" href="https://github.com/nightwatchmaker/RPlus">View on GitHub ↗</a></aside><main><div class="eyebrow">LANGUAGE / 04</div><h1>Shape your <span>data.</span></h1><p class="lede">Structs group named fields. An <code>impl</code> block attaches methods to a struct.</p><h2>Define a struct</h2><div class="terminal"><pre><code><b>struct</b> Point {
+    x: Int
+    y: Int
+}
+
+<b>let</b> origin = Point { x: 0, y: 0 }
+println(origin.x)</code></pre></div><h2>Attach methods</h2><div class="terminal"><pre><code><b>impl</b> Point {
+    <b>fn</b> sum(self: &amp;Point) -&gt; Int {
+        <b>return</b> self.x + self.y
+    }
+}
+
+println(origin.sum())</code></pre></div><p>Use <code>&amp;mut self</code> when a method mutates the receiver. The ownership checker makes sure that mutation is allowed.</p><footer><a href="index.html">← Back to docs home</a></footer></main></body></html>

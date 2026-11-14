@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>R+ Documentation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <input id="menu-toggle" type="checkbox" aria-label="Toggle navigation">
+  <label class="menu-button" for="menu-toggle">☰</label>
+  <aside class="sidebar">
+    <a class="brand" href="index.html"><span>R<span class="accent">+</span></span><small>language docs</small></a>
+    <nav>
+      <p>Start here</p>
+      <a class="active" href="index.html">Overview</a>
+      <a href="getting-started.html">Getting started</a>
+      <p>Language</p>
+      <a href="basics.html">Language basics</a>
+      <a href="control-flow.html">Control flow</a>
+      <a href="functions.html">Functions</a>
+      <a href="structs.html">Structs & methods</a>
+      <a href="lists.html">Lists & indexing</a>
+      <a href="ownership.html">Ownership</a>
+      <p>Tooling</p>
+      <a href="addons.html">Local addons</a>
+      <a href="native.html">Native compilation</a>
+    </nav>
+    <a class="github" href="https://github.com/nightwatchmaker/RPlus">View on GitHub ↗</a>
+  </aside>
+  <main>
+    <div class="eyebrow">RPLUS / DOCUMENTATION</div>
+    <h1>Build small programs<br><span>without the mystery.</span></h1>
+    <p class="lede">R+ is a small, typed language with a friendly syntax, ownership checks, and an optional native C backend.</p>
+    <div class="actions"><a class="button primary" href="getting-started.html">Get started <span>→</span></a><a class="button" href="basics.html">Learn the language</a></div>
+    <section class="hero-grid">
+      <div class="terminal"><div class="dots"><i></i><i></i><i></i><span>hello.rp</span></div><pre><code><b>let</b> message = <em>"hello, R+"</em>
+println(message)</code></pre></div>
+      <div class="quick"><span class="label">QUICK FACTS</span><ul><li><b>.rp</b> source files</li><li><b>.rpa</b> local addon files</li><li>Interpreter included</li><li>Native C compilation included</li></ul></div>
+    </section>
+    <h2>Find your way around</h2>
+    <div class="cards">
+      <a href="getting-started.html"><strong>01</strong><h3>Getting started</h3><p>Install R+, run your first file, and understand the CLI.</p></a>
+      <a href="basics.html"><strong>02</strong><h3>Language basics</h3><p>Variables, values, operators, and built-in functions.</p></a>
+      <a href="control-flow.html"><strong>03</strong><h3>Control flow</h3><p>Conditions, loops, break, and continue.</p></a>
+      <a href="functions.html"><strong>04</strong><h3>Functions</h3><p>Declare functions, return values, and call them cleanly.</p></a>
+      <a href="structs.html"><strong>05</strong><h3>Structs & methods</h3><p>Model data and attach behavior with impl blocks.</p></a>
+      <a href="addons.html"><strong>06</strong><h3>Local addons</h3><p>Split reusable functions into safe, local .rpa files.</p></a>
+    </div>
+    <footer>R+ is open source · <a href="https://github.com/nightwatchmaker/RPlus">nightwatchmaker/RPlus</a></footer>
+  </main>
+</body>
+</html>

@@ -1,0 +1,8 @@
+fn add(a: Int, b: Int) -> Int {
+    return a + b
+}
+
+mut answer = add(20, 22)
+if answer == 42 {
+    println("R+ works")
+}

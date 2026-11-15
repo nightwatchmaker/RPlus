@@ -25,9 +25,14 @@ class FunctionType:
     return_type: str
 
 
+@dataclass(frozen=True)
+class ModuleType:
+    fields: dict[str, FunctionType]
+
+
 @dataclass
 class Binding:
-    type_name: str | FunctionType
+    type_name: str | FunctionType | ModuleType
     mutable: bool = False
 
 
@@ -66,6 +71,16 @@ class TypeChecker:
         self.environment.define("randomize", FunctionType(("String",), "String"))
         self.environment.define("input", FunctionType(("String",), "String"))
         self.environment.define("len", FunctionType((ANY,), "Int"))
+        self.environment.define("gui", ModuleType({
+            "open": FunctionType(("String", "Int", "Int"), "Unit"),
+            "close": FunctionType((), "Unit"),
+            "poll": FunctionType((), "Unit"),
+            "clear": FunctionType(("Int", "Int", "Int"), "Unit"),
+            "rectangle": FunctionType(("Int", "Int", "Int", "Int", "Int", "Int"), "Unit"),
+            "present": FunctionType((), "Unit"),
+            "should_close": FunctionType((), "Bool"),
+            "key_down": FunctionType(("String",), "Bool"),
+        }))
 
     def check(self, program: Program):
         for statement in program.statements:
@@ -252,6 +267,10 @@ class TypeChecker:
             self.fail(f"Cannot index {object_type}")
         if isinstance(expression, GetExpression):
             object_type = self.check_expression(expression.object)
+            if isinstance(object_type, ModuleType):
+                if expression.name not in object_type.fields:
+                    self.fail(f"Unknown function '{expression.name}' on module")
+                return object_type.fields[expression.name]
             base_type = object_type.removeprefix("&mut ").removeprefix("&")
             method = self.methods.get((base_type, expression.name))
             if method:

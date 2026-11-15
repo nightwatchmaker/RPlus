@@ -72,6 +72,61 @@ class RStruct:
 
 
 @dataclass
+class RModule:
+    name: str
+    fields: dict[str, object]
+
+
+class RGui:
+    def __init__(self):
+        self.root = None
+        self.canvas = None
+        self.closed = True
+        self.keys = set()
+
+    def open(self, title, width, height):
+        import tkinter as tk
+        self.root = tk.Tk()
+        self.root.title(title)
+        self.canvas = tk.Canvas(self.root, width=width, height=height, highlightthickness=0)
+        self.canvas.pack()
+        self.closed = False
+        self.root.protocol("WM_DELETE_WINDOW", self.close)
+        self.root.bind("<KeyPress>", lambda event: self.keys.add(event.keysym.lower()))
+        self.root.bind("<KeyRelease>", lambda event: self.keys.discard(event.keysym.lower()))
+        self.root.focus_force()
+
+    def close(self):
+        self.closed = True
+        if self.root is not None:
+            self.root.destroy()
+            self.root = None
+            self.canvas = None
+
+    def poll(self):
+        if self.root is not None:
+            self.root.update_idletasks()
+            self.root.update()
+
+    def clear(self, red, green, blue):
+        self.canvas.configure(bg=f"#{int(red):02x}{int(green):02x}{int(blue):02x}")
+        self.canvas.delete("all")
+
+    def rectangle(self, x, y, width, height, red, green, blue):
+        color = f"#{int(red):02x}{int(green):02x}{int(blue):02x}"
+        self.canvas.create_rectangle(x, y, x + width, y + height, fill=color, outline=color)
+
+    def present(self):
+        self.poll()
+
+    def should_close(self):
+        return self.closed
+
+    def key_down(self, key):
+        return str(key).lower() in self.keys
+
+
+@dataclass
 class RFunction:
     declaration: FunctionDeclaration
     closure: Environment
@@ -98,6 +153,17 @@ class Interpreter:
         self.environment = Environment()
         self.output = output if output is not None else print
         self.methods = {}
+        self.gui = RGui()
+        self.environment.define("gui", RModule("gui", {
+            "open": self.gui.open,
+            "close": self.gui.close,
+            "poll": self.gui.poll,
+            "clear": self.gui.clear,
+            "rectangle": self.gui.rectangle,
+            "present": self.gui.present,
+            "should_close": self.gui.should_close,
+            "key_down": self.gui.key_down,
+        }))
         self.environment.define("println", self.output)
         self.environment.define("print", lambda value="": self.output(value, end=""))
         self.environment.define("randomize", lambda value: self.randomize(value))
@@ -224,6 +290,8 @@ class Interpreter:
                 raise RuntimeErrorRPlus("Index out of bounds")
         if isinstance(expression, GetExpression):
             value = self.evaluate(expression.object)
+            if isinstance(value, RModule) and expression.name in value.fields:
+                return value.fields[expression.name]
             if not isinstance(value, RStruct) or expression.name not in value.fields:
                 raise RuntimeErrorRPlus(f"Unknown field '{expression.name}'")
             return value.fields[expression.name]

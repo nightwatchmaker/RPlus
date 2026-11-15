@@ -43,13 +43,15 @@ class OwnershipEnvironment:
 
 class OwnershipChecker:
     COPY_TYPES = {"Int", "Float", "Bool", "Unit", "Any"}
-    BUILTINS = {"print", "println", "randomize", "input", "len"}
+    BUILTINS = {"print", "println", "randomize", "input", "len", "gui"}
 
     def __init__(self):
         self.environment = OwnershipEnvironment()
         self.functions: dict[str, FunctionDeclaration] = {}
         self.function_types: dict[str, tuple[list[str], str]] = {}
         self.method_types: dict[tuple[str, str], tuple[list[str], str]] = {}
+        for builtin in self.BUILTINS:
+            self.environment.define(builtin, "Any")
 
     def check(self, program: Program):
         for statement in program.statements:

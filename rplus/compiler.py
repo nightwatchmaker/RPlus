@@ -261,6 +261,8 @@ class CCompiler:
         if isinstance(expression, Binary): return f"({self.expression(expression.left)} {expression.operator} {self.expression(expression.right)})"
         if isinstance(expression, ListLiteral): return "{" + ", ".join(self.expression(element) for element in expression.elements) + "}"
         if isinstance(expression, Call):
+            if isinstance(expression.callee, GetExpression) and isinstance(expression.callee.object, Variable) and expression.callee.object.name == "gui":
+                raise CompileError("GUI support is currently available in interpreter mode only")
             if isinstance(expression.callee, Variable) and expression.callee.name == "randomize":
                 return f"rplus_randomize({', '.join(self.expression(argument) for argument in expression.arguments)})"
             if isinstance(expression.callee, Variable) and expression.callee.name == "input":
